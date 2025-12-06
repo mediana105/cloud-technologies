@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+  labels:
+    name: frontend
+data:
+  nginx.conf: |
+    server {
+        listen 80;
+        server_name _;
+        location / {
+            root /usr/share/nginx/html/;
+            index index.html;
+            try_files $uri $uri/ =404;
+        }
+        location /api/ {
+            proxy_pass http://backend-service:5000/;
+        }
+    }
