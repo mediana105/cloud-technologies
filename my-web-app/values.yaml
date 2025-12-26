@@ -1,0 +1,38 @@
+image:
+  tag: "latest"
+
+replicaCount: 2
+
+frontend:
+  image:
+    repository: nginx
+  service:
+    name: frontend-service
+    port: 80
+  livenessProbe:
+    path: /
+  readinessProbe:
+    path: /
+  name: frontend
+  configmapName: nginx-conf
+  containerName: nginx-frontend
+
+backend:
+  name: backend
+  image:
+    repository: digitalocean/flask-helloworld
+  livenessProbe:
+    path: /
+  readinessProbe:
+    path: /
+  service:
+    name: backend-service
+    port: 5000
+
+ingress:
+  enabled: true
+  className: "nginx"
+  name: main-ingress
+
+configmap:
+  name: nginx-conf
